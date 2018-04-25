@@ -65,6 +65,9 @@ static const struct virArchData {
     { "ppc64le",      64, VIR_ARCH_LITTLE_ENDIAN },
     { "ppcemb",       32, VIR_ARCH_BIG_ENDIAN },
 
+    { "riscv32",      32, VIR_ARCH_LITTLE_ENDIAN },
+    { "riscv64",      64, VIR_ARCH_LITTLE_ENDIAN },
+
     { "s390",         32, VIR_ARCH_BIG_ENDIAN },
     { "s390x",        64, VIR_ARCH_BIG_ENDIAN },
     { "sh4",          32, VIR_ARCH_LITTLE_ENDIAN },
