@@ -2903,6 +2903,9 @@ mymain(void)
             QEMU_CAPS_KVM,
             QEMU_CAPS_SEV_GUEST);
 
+    DO_TEST("riscv64-virt",
+            QEMU_CAPS_DEVICE_VIRTIO_MMIO);
+
     if (getenv("LIBVIRT_SKIP_CLEANUP") == NULL)
         virFileDeleteTree(fakerootdir);
 
