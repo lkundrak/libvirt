@@ -28,6 +28,8 @@ typedef enum {
     TEST_UTILS_QEMU_BIN_ARM,
     TEST_UTILS_QEMU_BIN_PPC64,
     TEST_UTILS_QEMU_BIN_PPC,
+    TEST_UTILS_QEMU_BIN_RISCV32,
+    TEST_UTILS_QEMU_BIN_RISCV64,
     TEST_UTILS_QEMU_BIN_S390X
 } QEMUBinType;
 
@@ -38,6 +40,8 @@ static const char *QEMUBinList[] = {
     "/usr/bin/qemu-system-arm",
     "/usr/bin/qemu-system-ppc64",
     "/usr/bin/qemu-system-ppc",
+    "/usr/bin/qemu-system-riscv32",
+    "/usr/bin/qemu-system-riscv64",
     "/usr/bin/qemu-system-s390x"
 };
 
@@ -285,6 +289,68 @@ static int testQemuAddPPCGuest(virCapsPtr caps)
     return -1;
 }
 
+static int testQemuAddRISCV32Guest(virCapsPtr caps)
+{
+    static const char *machine[] = { "spike_v1.10",
+                                     "spike_v1.9.1",
+                                     "sifive_e",
+                                     "virt",
+                                     "sifive_u" };
+    virCapsGuestMachinePtr *machines = NULL;
+    virCapsGuestPtr guest;
+
+    machines = virCapabilitiesAllocMachines(machine, 1);
+    if (!machines)
+        goto error;
+
+    guest = virCapabilitiesAddGuest(caps, VIR_DOMAIN_OSTYPE_HVM, VIR_ARCH_RISCV32,
+                                    QEMUBinList[TEST_UTILS_QEMU_BIN_RISCV32],
+                                    NULL, 1, machines);
+    if (!guest)
+        goto error;
+
+    if (!virCapabilitiesAddGuestDomain(guest, VIR_DOMAIN_VIRT_QEMU, NULL, NULL, 0, NULL))
+        goto error;
+
+    return 0;
+
+ error:
+    /* No way to free a guest? */
+    virCapabilitiesFreeMachines(machines, 1);
+    return -1;
+}
+
+static int testQemuAddRISCV64Guest(virCapsPtr caps)
+{
+    static const char *machine[] = { "spike_v1.10",
+                                     "spike_v1.9.1",
+                                     "sifive_e",
+                                     "virt",
+                                     "sifive_u" };
+    virCapsGuestMachinePtr *machines = NULL;
+    virCapsGuestPtr guest;
+
+    machines = virCapabilitiesAllocMachines(machine, 1);
+    if (!machines)
+        goto error;
+
+    guest = virCapabilitiesAddGuest(caps, VIR_DOMAIN_OSTYPE_HVM, VIR_ARCH_RISCV64,
+                                    QEMUBinList[TEST_UTILS_QEMU_BIN_RISCV64],
+                                    NULL, 1, machines);
+    if (!guest)
+        goto error;
+
+    if (!virCapabilitiesAddGuestDomain(guest, VIR_DOMAIN_VIRT_QEMU, NULL, NULL, 0, NULL))
+        goto error;
+
+    return 0;
+
+ error:
+    /* No way to free a guest? */
+    virCapabilitiesFreeMachines(machines, 1);
+    return -1;
+}
+
 static int testQemuAddS390Guest(virCapsPtr caps)
 {
     static const char *s390_machines[] = { "s390-virtio",
@@ -420,6 +486,12 @@ virCapsPtr testQemuCapsInit(void)
         goto cleanup;
 
     if (testQemuAddPPCGuest(caps))
+        goto cleanup;
+
+    if (testQemuAddRISCV32Guest(caps))
+        goto cleanup;
+
+    if (testQemuAddRISCV64Guest(caps))
         goto cleanup;
 
     if (testQemuAddS390Guest(caps))
