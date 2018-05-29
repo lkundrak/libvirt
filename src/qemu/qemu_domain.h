@@ -771,7 +771,7 @@ bool qemuDomainHasPCIRoot(const virDomainDef *def);
 bool qemuDomainHasPCIeRoot(const virDomainDef *def);
 bool qemuDomainNeedsFDC(const virDomainDef *def);
 bool qemuDomainIsS390CCW(const virDomainDef *def);
-bool qemuDomainIsVirt(const virDomainDef *def);
+bool qemuDomainIsARMVirt(const virDomainDef *def);
 bool qemuDomainIsPSeries(const virDomainDef *def);
 bool qemuDomainHasBuiltinIDE(const virDomainDef *def);
 

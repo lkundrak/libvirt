@@ -485,7 +485,7 @@ qemuDomainAssignARMVirtioMMIOAddresses(virDomainDefPtr def,
         return;
 
     if (!(STRPREFIX(def->os.machine, "vexpress-") ||
-          qemuDomainIsVirt(def)))
+          qemuDomainIsARMVirt(def)))
         return;
 
     /* We use virtio-mmio by default on mach-virt guests only if they already
@@ -2180,7 +2180,7 @@ qemuDomainSupportsPCI(virDomainDefPtr def,
     if (STREQ(def->os.machine, "versatilepb"))
         return true;
 
-    if (qemuDomainIsVirt(def) &&
+    if (qemuDomainIsARMVirt(def) &&
         virQEMUCapsGet(qemuCaps, QEMU_CAPS_OBJECT_GPEX))
         return true;
 
