@@ -502,6 +502,23 @@ qemuDomainAssignARMVirtioMMIOAddresses(virDomainDefPtr def,
 }
 
 
+static void
+qemuDomainAssignRISCVVirtioMMIOAddresses(virDomainDefPtr def,
+                                         virQEMUCapsPtr qemuCaps)
+{
+    if (!ARCH_IS_RISCV(def->os.arch))
+        return;
+
+    if (STRNEQ(def->os.machine, "virt"))
+        return;
+
+    if (virQEMUCapsGet(qemuCaps, QEMU_CAPS_DEVICE_VIRTIO_MMIO)) {
+        qemuDomainPrimeVirtioDeviceAddresses(def,
+                                             VIR_DOMAIN_DEVICE_ADDRESS_TYPE_VIRTIO_MMIO);
+    }
+}
+
+
 /**
  * qemuDomainDeviceCalculatePCIConnectFlags:
  *
@@ -2939,6 +2956,8 @@ qemuDomainAssignAddresses(virDomainDefPtr def,
         return -1;
 
     qemuDomainAssignARMVirtioMMIOAddresses(def, qemuCaps);
+
+    qemuDomainAssignRISCVVirtioMMIOAddresses(def, qemuCaps);
 
     if (qemuDomainAssignPCIAddresses(def, qemuCaps, driver, obj) < 0)
         return -1;
