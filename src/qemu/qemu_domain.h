@@ -817,8 +817,8 @@ bool qemuDomainMachineIsQ35(const char *machine);
 bool qemuDomainMachineIsI440FX(const char *machine);
 bool qemuDomainMachineNeedsFDC(const char *machine);
 bool qemuDomainMachineIsS390CCW(const char *machine);
-bool qemuDomainMachineIsVirt(const char *machine,
-                             const virArch arch);
+bool qemuDomainMachineIsARMVirt(const char *machine,
+                                const virArch arch);
 bool qemuDomainMachineIsPSeries(const char *machine,
                                 const virArch arch);
 bool qemuDomainMachineHasBuiltinIDE(const char *machine);

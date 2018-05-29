@@ -9455,13 +9455,13 @@ qemuDomainMachineIsS390CCW(const char *machine)
 bool
 qemuDomainIsVirt(const virDomainDef *def)
 {
-    return qemuDomainMachineIsVirt(def->os.machine, def->os.arch);
+    return qemuDomainMachineIsARMVirt(def->os.machine, def->os.arch);
 }
 
 
 bool
-qemuDomainMachineIsVirt(const char *machine,
-                        const virArch arch)
+qemuDomainMachineIsARMVirt(const char *machine,
+                           const virArch arch)
 {
     if (arch != VIR_ARCH_ARMV7L &&
         arch != VIR_ARCH_AARCH64)
